@@ -42,6 +42,7 @@ namespace VirtualDesktopManager
 
             closeToTray = true;
 
+            /*
             _rightHotkey = new HotKeyManager();
             _rightHotkey.KeyPressed += RightKeyManagerPressed;
 
@@ -50,6 +51,7 @@ namespace VirtualDesktopManager
 
             _numberHotkey = new HotKeyManager();
             _numberHotkey.KeyPressed += NumberHotkeyPressed;
+            */
 
             VirtualDesktop.CurrentChanged += VirtualDesktop_CurrentChanged;
             VirtualDesktop.Created += VirtualDesktop_Added;
@@ -141,9 +143,11 @@ namespace VirtualDesktopManager
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            /*
             _rightHotkey.Dispose();
             _leftHotkey.Dispose();
             _numberHotkey.Dispose();
+            */
 
             closeToTray = false;
 
@@ -154,9 +158,11 @@ namespace VirtualDesktopManager
         {            
             try
             {
+                /*
                 _rightHotkey.Register(Key.Right, System.Windows.Input.ModifierKeys.Control | System.Windows.Input.ModifierKeys.Alt);
                 _leftHotkey.Register(Key.Left, System.Windows.Input.ModifierKeys.Control | System.Windows.Input.ModifierKeys.Alt);
                 RegisterNumberHotkeys(System.Windows.Input.ModifierKeys.Control | System.Windows.Input.ModifierKeys.Alt);
+                */
             }
             catch (Exception err)
             {
@@ -170,9 +176,11 @@ namespace VirtualDesktopManager
         {
             try
             {
+                /*
                 _rightHotkey.Register(Key.Right, System.Windows.Input.ModifierKeys.Shift | System.Windows.Input.ModifierKeys.Alt);
                 _leftHotkey.Register(Key.Left, System.Windows.Input.ModifierKeys.Shift | System.Windows.Input.ModifierKeys.Alt);
                 RegisterNumberHotkeys(System.Windows.Input.ModifierKeys.Shift | System.Windows.Input.ModifierKeys.Alt);
+                */
             }
             catch (Exception err)
             {
@@ -184,6 +192,7 @@ namespace VirtualDesktopManager
 
         private void RegisterNumberHotkeys(ModifierKeys modifiers)
         {
+            /*
             _numberHotkey.Register(Key.D1, modifiers);
             _numberHotkey.Register(Key.D2, modifiers);
             _numberHotkey.Register(Key.D3, modifiers);
@@ -193,16 +202,19 @@ namespace VirtualDesktopManager
             _numberHotkey.Register(Key.D7, modifiers);
             _numberHotkey.Register(Key.D8, modifiers);
             _numberHotkey.Register(Key.D9, modifiers);
+            */
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             labelStatus.Text = "";
 
+            /*
             if (!useAltKeySettings)
                 normalHotkeys();
             else
                 alternateHotkeys();
+            */
 
             var desktop = initialDesktopState();
             changeTrayIcon();
@@ -244,6 +256,11 @@ namespace VirtualDesktopManager
             var desktopNumber = currentDesktopIndex + 1;
             var desktopNumberString = desktopNumber.ToString();
 
+            var fontSize = 210;
+            var xPlacement = 0;
+            var yPlacement = 0;
+
+/*
             var fontSize = 140;
             var xPlacement = 100;
             var yPlacement = 50;
@@ -259,12 +276,16 @@ namespace VirtualDesktopManager
                 xPlacement = 90;
                 yPlacement = 100;
             }
+*/
 
-            Bitmap newIcon = Properties.Resources.mainIcoPng;
-            Font desktopNumberFont = new Font("Segoe UI", fontSize, FontStyle.Bold, GraphicsUnit.Pixel);
+            //Bitmap newIcon = Properties.Resources.mainIcoPng;
+            Bitmap newIcon = new Bitmap(256, 256);
+            //Font desktopNumberFont = new Font("Segoe UI", fontSize, FontStyle.Bold, GraphicsUnit.Pixel);
+            Font desktopNumberFont = new Font("Arial", 256, FontStyle.Bold, GraphicsUnit.Pixel);
 
             var gr = Graphics.FromImage(newIcon);
-            gr.DrawString(desktopNumberString, desktopNumberFont, Brushes.White, xPlacement, yPlacement);
+            //gr.DrawString(desktopNumberString, desktopNumberFont, Brushes.White, xPlacement, yPlacement);
+            gr.DrawString(desktopNumberString, FindFont(gr, desktopNumberString, new Size(256, 256), desktopNumberFont), Brushes.LimeGreen, 0, 0);
 
             Icon numberedIcon = Icon.FromHandle(newIcon.GetHicon());
             notifyIcon1.Icon = numberedIcon;
@@ -273,6 +294,16 @@ namespace VirtualDesktopManager
             desktopNumberFont.Dispose();
             newIcon.Dispose();
             gr.Dispose();
+        }
+
+        private Font FindFont(System.Drawing.Graphics g, string longString, Size Room, Font PreferedFont)
+        {
+            SizeF RealSize = g.MeasureString(longString, PreferedFont);
+            float HeightScaleRatio = Room.Height / RealSize.Height;
+            float WidthScaleRatio = Room.Width / RealSize.Width;
+            float ScaleRatio = (HeightScaleRatio < WidthScaleRatio) ? ScaleRatio = HeightScaleRatio : ScaleRatio = WidthScaleRatio;
+            float ScaleFontSize = PreferedFont.Size * ScaleRatio;
+            return new Font(PreferedFont.FontFamily, ScaleFontSize+40, PreferedFont.Style, GraphicsUnit.Pixel);
         }
 
         VirtualDesktop initialDesktopState()
@@ -396,6 +427,7 @@ namespace VirtualDesktopManager
 
         private void saveButton_Click(object sender, EventArgs e)
         {
+            /*
             _rightHotkey.Unregister(Key.Right, System.Windows.Input.ModifierKeys.Control | System.Windows.Input.ModifierKeys.Alt);
             _leftHotkey.Unregister(Key.Left, System.Windows.Input.ModifierKeys.Control | System.Windows.Input.ModifierKeys.Alt);
             _rightHotkey.Unregister(Key.Right, System.Windows.Input.ModifierKeys.Shift | System.Windows.Input.ModifierKeys.Alt);
@@ -411,6 +443,7 @@ namespace VirtualDesktopManager
                 normalHotkeys();
                 Properties.Settings.Default.AltHotKey = false;
             }
+            */
 
             Properties.Settings.Default.DesktopBackgroundFiles.Clear();
             foreach (ListViewItem item in listView1.Items)
